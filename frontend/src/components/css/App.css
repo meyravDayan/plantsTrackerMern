@@ -1,0 +1,95 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto+Serif");
+
+body {
+    background-color: #f8f8f8;
+}
+
+.navbar li {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.navbar {
+    background-color: #aac8a7;
+    font-weight: 500;
+}
+
+.nav-link {
+    color: #f2f2f2 !important;
+}
+
+.logout-text {
+    text-decoration: underline;
+}
+
+.main-search {
+    /* background-color: #f0eeed; */
+    background-color: white;
+}
+.add-plants-btn {
+    /* background-color: #99a98f; */
+    background-color: #a9907e;
+    color: white;
+}
+
+.search-btn {
+    /* background-color: #99a98f; */
+    background-color: #db6b97;
+    color: white;
+}
+
+.image-card {
+    width: 18rem;
+}
+
+.plant-profile-btn {
+    background-color: #db6b97;
+    color: white;
+}
+
+.plant-thumbnail {
+    border-radius: 50%;
+    width: 13rem;
+    height: 13rem;
+}
+
+.login-header {
+    color: #db6b97;
+    font-family: "Roboto Serif", serif;
+    font-weight: 600;
+}
+
+.google-btn {
+    width: 100%;
+    background-color: white;
+}
+
+.img-container {
+    position: relative;
+    /* border-width: 1rem; */
+    /* border-style: solid; */
+}
+.img-container img {
+    display: block;
+}
+
+.plus-sign {
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    background-color: white;
+    border-width: 0.2rem;
+    border-style: solid;
+    border-color: white;
+    top: 90%;
+}
+
+.new-plant-text {
+    /* font-family: "Roboto Serif", serif; */
+    font-style: italic;
+    /* color: blue; */
+}
+
+html {
+    font-size: large;
+}
