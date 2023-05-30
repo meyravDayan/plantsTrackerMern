@@ -88,13 +88,10 @@ function Plant(props) {
         rf.onloadend = function (event) {
             const body = new FormData();
             body.append("image", event.target.result.split(",").pop()); //To delete 'data:image/png;base64,' otherwise imgbb won't process it.
-            fetch(
-                "https://api.imgbb.com/1/upload?key=8140cd61031acde01bdf9f129a837de0",
-                {
-                    method: "POST",
-                    body: body,
-                }
-            )
+            fetch(process.env.REACT_APP_IMGBB_URL, {
+                method: "POST",
+                body: body,
+            })
                 .then((res) => res.json())
                 .then((jsonRes) => {
                     setPlant((previousState) => {
