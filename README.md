@@ -1,6 +1,6 @@
 # Plants Tracker
 
-Plants Tracker is a MERN stack web application designed for plant management. This project was created to fulfill personal needs and serves as a platform to explore and practice using development tools. Please note that it is still under construction. The project is hosted and can be visited at [www.plantstracker.com](www.plantstracker.com).
+Plants Tracker is a MERN stack web application designed for plant management. This project was created to fulfill personal needs and serves as a platform to explore and practice using development tools. Please note that it is still under construction. The project is hosted and can be visited at www.plantstracker.com.
 
 ## Table of Contents
 
