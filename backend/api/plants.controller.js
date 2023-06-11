@@ -1,6 +1,6 @@
 import PlantsDAO from "../dao/plantsDAO.js";
 // import RestaurantsDAO from "../dao/restaurantsDAO.js";
-import plantProfile from "../plantProfile.js";
+import { plantProfile, wateringFrequencyDaysValues } from "../plantProfile.js";
 
 export default class PlantsController {
     static async apiGetUserPlants(req, res, next) {
@@ -61,6 +61,11 @@ export default class PlantsController {
                         : null;
                 }
             });
+            newPlantProfile.waterFrequencyScores = wateringFrequencyDaysValues[
+                newPlantProfile.prefrences.water
+            ]
+                ? wateringFrequencyDaysValues[newPlantProfile.prefrences.water]
+                : 0;
             newPlantProfile.dateCreated = new Date().toJSON().slice(0, 10);
             console.log(newPlantProfile);
             const PlantProfileResponse = await PlantsDAO.addPlant(
@@ -99,6 +104,16 @@ export default class PlantsController {
                 }
             });
             // newPlantProfile.dateCreated = new Date().toJSON().slice(0, 10);
+            if (prefrencedWater in filteredPlantProfile) {
+                newPlantProfile.waterFrequencyScores =
+                    wateringFrequencyDaysValues[
+                        newPlantProfile.prefrences.water
+                    ]
+                        ? wateringFrequencyDaysValues[
+                              newPlantProfile.prefrences.water
+                          ]
+                        : 0;
+            }
             const plantResponse = await PlantsDAO.updatePlant(
                 ids,
                 newPlantProfile

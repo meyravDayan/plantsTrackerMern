@@ -41,7 +41,31 @@ export default class PlantsDAO {
         let cursor;
 
         try {
-            cursor = await plants.find(query);
+            // cursor = await plants.find(query);
+            cursor = await plants.aggregate([
+                { $match: query }, // Match documents that answer the query
+                {
+                    $addFields: {
+                        calculatedValue: {
+                            $multiply: [
+                                "$waterFrequencyScores",
+                                {
+                                    $divide: [
+                                        {
+                                            $subtract: [
+                                                new Date(),
+                                                "$lastWatered",
+                                            ],
+                                        },
+                                        1000 * 60 * 60 * 24, // Convert milliseconds to days
+                                    ],
+                                },
+                            ],
+                        },
+                    },
+                },
+                { $sort: { calculatedValue: -1 } },
+            ]);
         } catch (e) {
             console.error(`Unable to issue find command, ${e}`);
             return { plantsList: [], totalNumPlants: 0 };

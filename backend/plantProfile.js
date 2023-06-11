@@ -14,4 +14,11 @@ const plantProfile = [
     // "dateCreated",
 ];
 
-export default plantProfile;
+const wateringFrequencyDaysValues = {
+    "Keep soil dump": 1000,
+    "Once a week": 500,
+    "Once every two weeks": 100,
+    "Once a month": 10,
+};
+
+export default { plantProfile, wateringFrequencyDaysValues };
