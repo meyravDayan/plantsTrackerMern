@@ -26,7 +26,7 @@ const NavigationBar = () => {
     };
 
     return (
-        <nav className="navbar navbar-expand navbar-dark sticky-top">
+        <nav className="navbar navbar-expand-lg navbar-dark sticky-top">
             <div className="container-fluid">
                 {pathname === "/plant" || pathname === "/" ? (
                     <a className="navbar-brand" href="#">
@@ -51,7 +51,21 @@ const NavigationBar = () => {
                         PlantsTracker
                     </Link>
                 )}
-                <div>
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div
+                    className="collapse navbar-collapse"
+                    id="navbarSupportedContent"
+                >
                     <ul className="navbar-nav me-auto">
                         <li className="nav-item">
                             <Link to={"/plant"} className="nav-link">

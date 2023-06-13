@@ -7,6 +7,8 @@ import { SlPlus } from "react-icons/sl";
 import { getCurrentDate, getDaysDiff } from "../utils";
 import { wateringFrequencyDaysValues } from "../plantProfile";
 import { UserContext } from "../contexts/user";
+import Pagination from "./pagination";
+import PlantCard from "./plant-card.js";
 
 function PlantsList() {
     const today = getCurrentDate();
@@ -20,6 +22,9 @@ function PlantsList() {
         species: "",
     });
     const [searchBtn, setSearchBtn] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const postsPerPage = 20;
+    const [totalPlants, setTotalPlants] = useState(0);
 
     // function that sort the list of plants by the amount of days past watering
     const sortByWateringNeeds = useCallback(
@@ -38,10 +43,12 @@ function PlantsList() {
             plantDataService
                 .getAll(userId)
                 .then((response) => {
+                    // console.log(response.data);
                     const sortedPlants = sortByWateringNeeds(
                         response.data.plants
                     );
                     setPlants(sortedPlants);
+                    setTotalPlants(response.data.total_results);
                 })
                 .catch((e) => {
                     console.log(e);
@@ -104,11 +111,6 @@ function PlantsList() {
             .catch((e) => console.log(e));
     };
 
-    const determineButtonActive = (lastTime) => {
-        const today = getCurrentDate();
-        return !(lastTime === today);
-    };
-
     const daysPastWatering = (plant, currentDate) => {
         if (wateringFrequencyDaysValues[plant.prefrences.water]) {
             const diffDays = getDaysDiff(plant.lastWatered, currentDate);
@@ -119,28 +121,10 @@ function PlantsList() {
         return -1;
     };
 
-    const chooseImage = (progressImages) => {
-        if (progressImages.length > 0) {
-            return (
-                <img
-                    src={progressImages[progressImages.length - 1].imgUrl}
-                    alt=""
-                    className="img-thumbnail mx-auto mb-2 d-block plant-thumbnail"
-                />
-            );
-        }
-        return (
-            <img
-                src="/images/cute_plant.png"
-                alt=""
-                className="img-thumbnail mx-auto mb-2 d-block plant-thumbnail"
-            />
-        );
-    };
-
+    // to search plants call "refreshList" which is downstream (it takes filters into account)
     const find = useCallback(() => {
         plantDataService
-            .filterSearch(userId, searchFilter)
+            .filterSearch(userId, searchFilter, currentPage - 1)
             .then((response) => {
                 const sortedPlants = sortByWateringNeeds(response.data.plants);
                 setPlants(sortedPlants);
@@ -148,7 +132,7 @@ function PlantsList() {
             .catch((e) => {
                 console.log(e);
             });
-    }, [searchFilter, userId, sortByWateringNeeds]);
+    }, [searchFilter, userId, sortByWateringNeeds, currentPage]);
 
     useEffect(() => {
         if (searchBtn) {
@@ -157,7 +141,12 @@ function PlantsList() {
         }
     }, [searchBtn, userId, sortByWateringNeeds, find]);
 
-    //
+    // Handle page change
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        refreshList();
+    };
+
     return (
         <div>
             <div>
@@ -225,16 +214,6 @@ function PlantsList() {
                     </div>
                 </div>
                 {/* ###end of search form #### */}
-                {/* <div className="col input-group justify-content-center">
-                    <div className="input-group-append col-md-3">
-                        <Link
-                            to={`/user/${userId}/plant/add_plant`}
-                            className="btn btn-outline-dark add-plants-btn d-grid gap-2"
-                        >
-                            Create new plant 🌱
-                        </Link>
-                    </div>
-                </div> */}
             </div>
             <br />
             <div className="row mx-2 g-2">
@@ -268,119 +247,22 @@ function PlantsList() {
                         </div>
                     </div>
                 </div>
-                {plants.map((plant) => {
-                    return (
-                        <div
-                            key={plant._id}
-                            className="col-md-4 col-lg-3 col-sm-6 pb-1"
-                        >
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title text-center">
-                                        {plant.nickname}
-                                    </h5>
-                                    {daysPastWatering(plant, today) >= 0 ? (
-                                        <h6 className=" text-center">
-                                            Needs watering 💧
-                                        </h6>
-                                    ) : (
-                                        <h6>
-                                            <br />
-                                        </h6>
-                                    )}
-                                    {chooseImage(plant.progressImages)}
-                                    <p className="card-text text-center">
-                                        <strong>Location: </strong>
-                                        {plant.location}
-                                        <br />
-                                        <strong>Species: </strong>
-                                        {plant.species}
-                                        <br />
-                                        <strong>Last Time Watered: </strong>
-                                        {plant.lastWatered}
-                                        <br />
-                                        <strong>Last Time Fertilized: </strong>
-                                        {plant.lastFertilized}
-                                    </p>
-                                    <div className="row">
-                                        {determineButtonActive(
-                                            plant.lastWatered
-                                        ) ? (
-                                            <button
-                                                type="submit"
-                                                className="btn btn-outline-dark col-lg-10 mb-1 mx-auto"
-                                                onClick={() =>
-                                                    handleWatering(
-                                                        userId,
-                                                        plant._id
-                                                    )
-                                                }
-                                            >
-                                                <IoIosWater
-                                                    style={{ color: "#088395" }}
-                                                />{" "}
-                                                Water Plant
-                                            </button>
-                                        ) : (
-                                            <button
-                                                type="submit"
-                                                className="btn btn-outline-dark col-lg-10 mb-1 mx-auto"
-                                                disabled
-                                            >
-                                                <IoIosWater
-                                                    style={{ color: "#088395" }}
-                                                />{" "}
-                                                Plant watered
-                                            </button>
-                                        )}
-                                    </div>
-                                    <div className="row">
-                                        {determineButtonActive(
-                                            plant.lastFertilized
-                                        ) ? (
-                                            <button
-                                                type="submit"
-                                                className="btn btn-outline-dark col-lg-10 mb-1 mx-auto"
-                                                onClick={() =>
-                                                    handleFertilizer(
-                                                        userId,
-                                                        plant._id
-                                                    )
-                                                }
-                                            >
-                                                <GiFertilizerBag
-                                                    style={{ color: "#9E6F21" }}
-                                                />{" "}
-                                                Fertilize Plant
-                                            </button>
-                                        ) : (
-                                            <button
-                                                type="submit"
-                                                className="btn btn-outline-dark col-lg-10 mb-1 mx-auto"
-                                                disabled
-                                            >
-                                                <GiFertilizerBag
-                                                    style={{ color: "#9E6F21" }}
-                                                />{" "}
-                                                Plant fertilized
-                                            </button>
-                                        )}
-                                    </div>
-                                    <div className="row">
-                                        <Link
-                                            to={"/plant/" + plant._id}
-                                            className="btn btn-outline-dark col-lg-10 mb-1 mx-auto"
-                                            style={{ color: "#D14D72" }}
-                                        >
-                                            View Plant
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
+                {plants.map((plant, index) => (
+                    <PlantCard
+                        key={index}
+                        userId={userId}
+                        plant={plant}
+                        onWatering={handleWatering}
+                        onFertilizing={handleFertilizer}
+                    />
+                ))}
             </div>
+            <br />
+            <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(totalPlants / postsPerPage)}
+                onPageChange={handlePageChange}
+            />
         </div>
     );
 }

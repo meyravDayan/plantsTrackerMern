@@ -17,8 +17,8 @@ const plantProfile = [
 const initialGetPlantState = {
     species: "",
     nickname: "",
-    lastWatered: null,
-    lastFertilized: null,
+    lastWatered: "Unspecified",
+    lastFertilized: "Unspecified",
     prefrences: {
         light: "",
         water: "",
@@ -35,8 +35,8 @@ const initialGetPlantState = {
 const initialPostPlantState = {
     species: "Unspecified",
     nickname: "",
-    lastWatered: "Unspecfied",
-    lastFertilized: "Unspecified",
+    lastWatered: null,
+    lastFertilized: null,
     prefrencedLight: "",
     prefrencedWater: "",
     prefrencedHumidity: "",

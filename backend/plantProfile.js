@@ -21,4 +21,4 @@ const wateringFrequencyDaysValues = {
     "Once a month": 10,
 };
 
-export default { plantProfile, wateringFrequencyDaysValues };
+export { plantProfile, wateringFrequencyDaysValues };

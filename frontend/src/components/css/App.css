@@ -3,6 +3,12 @@
 body {
     background-color: #f8f8f8;
 }
+/* 
+@media all and (max-width: 600px) {
+    .navbar-nav {
+        margin: 0;
+    }
+} */
 
 .navbar li {
     margin-left: 0.5rem;
@@ -92,4 +98,21 @@ body {
 
 html {
     font-size: large;
+}
+
+/* pagination colors */
+.page-item.active .page-link {
+    color: #fff !important;
+    background: #aac8a7 !important;
+    border: solid 1px #e9ecef;
+}
+.page-item .page-link {
+    color: #aac8a7 !important;
+    background: white !important;
+    border: solid 1px #e9ecef;
+}
+.page-item.disabled .page-link {
+    color: #ced4da !important;
+    background: white !important;
+    border: solid 1px #e9ecef;
 }
